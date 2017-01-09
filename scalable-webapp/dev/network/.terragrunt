@@ -1,0 +1,21 @@
+# Configure Terragrunt to use DynamoDB for locking
+lock = {
+  backend = "dynamodb"
+  config {
+    state_file_id = "digital_provisioning"
+    aws_region = "eu-west-1"
+    table_name = "terragrunt_locks"
+    max_lock_retries = 30
+  }
+}
+
+# Configure Terragrunt to automatically store tfstate files in an S3 bucket
+remote_state = {
+  backend = "s3"
+  config {
+    encrypt = "true"
+    bucket = "digital-provisioning-d93ae214a55f4238b0db5d6e53510081"
+    key = "digital_provisioning_example/scalable-webapp/dev/network/terraform.tfstate"
+    region = "eu-west-1"
+  }
+}
