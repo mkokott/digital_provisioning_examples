@@ -12,7 +12,10 @@ data "terraform_remote_state" "network" {
 module "webservers" {
   source = "git::git@github.com:mkokott/digital_provisioning_modules.git//loadbalanced-webapp"
 
-  vpc_id                = "${data.terraform_remote_state.network.lbwa_vpc_id}"
-  subnet_ids            = ["1234"]
+  ec2_ami_id            = "${lookup(var.ec2_amis, var.aws_region)}"
+  ec2_instance_type     = "${var.ec2_instance_type}"
+  region                = "${var.aws_region}"
+  subnet_ids            = ["${data.terraform_remote_state.network.lbwa_subnet_ids}"]
   resource_default_tags = ["${var.resource_default_tags}"]
+  vpc_id                = "${data.terraform_remote_state.network.lbwa_vpc_id}"
 }
